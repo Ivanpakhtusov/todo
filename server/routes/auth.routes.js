@@ -3,21 +3,25 @@ const bcrypt = require("bcrypt");
 const { User } = require("../db/models");
 
 router.post("/signin", async (req, res) => {
-  const { email, password } = req.body;
+  const { login, password } = req.body;
 
   try {
-    if (email || password) {
-      const user = await User.findOne({ where: { email } });
+    if (login || password) {
+      const user = await User.findOne({ where: { login } });
       if (user && (await bcrypt.compare(password, user.password))) {
         const newUser = {
           id: user.id,
           name: user.name,
-          email: user.email,
+          surname: user.surname,
+          middlename: user.middlename,
+          login: user.login,
         };
         req.session.userId = newUser.id;
         res.status(201).json(newUser);
       } else {
-        res.status(403).json({ message: "Ваш email пароль не соответствуют" });
+        res
+          .status(403)
+          .json({ message: "Ваш логин или пароль не соответствуют" });
       }
     } else {
       res.status(403).json({ message: "Заполните все поля" });
@@ -28,23 +32,31 @@ router.post("/signin", async (req, res) => {
 });
 
 router.post("/signup", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, surname, middlename, login, password } = req.body;
 
   try {
-    if (name || email || password) {
-      const user = await User.findOne({ where: { email } });
+    if (name && surname && middlename && login && password) {
+      const user = await User.findOne({ where: { login } });
       if (!user) {
         const hash = await bcrypt.hash(password, 10);
-        let newUser = await User.create({ name, email, password: hash });
+        let newUser = await User.create({
+          name,
+          surname,
+          middlename,
+          login,
+          password: hash,
+        });
         newUser = {
           id: newUser.id,
           name: newUser.name,
-          email: newUser.email,
+          surname: newUser.surname,
+          middlename: newUser.middlename,
+          login: newUser.login,
         };
         req.session.userId = newUser.id;
         res.status(201).json(newUser);
       } else {
-        res.status(403).json({ message: "Такой email уже существует" });
+        res.status(403).json({ message: "Такой логин уже существует" });
       }
     } else {
       res.status(403).json({ message: "Заполните все поля" });
