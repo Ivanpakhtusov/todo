@@ -6,7 +6,7 @@ router.post("/signin", async (req, res) => {
   const { login, password } = req.body;
 
   try {
-    if (login || password) {
+    if (login && password) {
       const user = await User.findOne({ where: { login } });
       if (user && (await bcrypt.compare(password, user.password))) {
         const newUser = {

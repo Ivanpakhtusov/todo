@@ -1,22 +1,19 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-function LoginForm() {
+function SignIn() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.get("/auth/signin", { login, password });
+      const response = await axios.post("http://localhost:4000/auth/signin", { login, password });
       console.log(response.data);
       setLogin("");
       setPassword("");
-      navigate("/");
     } catch (error) {
-      console.log(error.message);
+      alert(error.response.data.message);
     }
   };
 
@@ -45,4 +42,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default SignIn;
