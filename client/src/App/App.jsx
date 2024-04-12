@@ -37,7 +37,7 @@ function App() {
           <TaskList />
         </>
       ) : (
-        <SignIn />
+        <SignIn setUser={setUser} />
       )}
     </>
   );
