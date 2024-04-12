@@ -5,14 +5,22 @@ import TaskList from "../components/TaskList/TaskList";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [sessionId, setSessionId] = useState(null);
 
   useEffect(() => {
     const checkUser = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/auth/checkUser");
-        setUser(response.data);
-      } catch (error) {
-        console.log(error);
+      const cookie = document.cookie.split("; ").find((row) => row.startsWith("user_sid="));
+
+      if (cookie) {
+        try {
+          const response = await axios.get("http://localhost:4000/auth/checkUser", {
+            withCredentials: true,
+          });
+          setUser(response.data.user);
+          setSessionId(response.data.sessionId);
+        } catch (error) {
+          console.log(error);
+        }
       }
     };
 
@@ -21,8 +29,11 @@ function App() {
 
   const handleLogout = async () => {
     try {
-      await axios.get("http://localhost:4000/auth/logout");
+      await axios.get("http://localhost:4000/auth/logout", {
+        withCredentials: true,
+      });
       setUser(null);
+      setSessionId(null);
     } catch (error) {
       console.log(error);
     }
@@ -34,7 +45,7 @@ function App() {
         <>
           <div>{user.name}</div>
           <button onClick={handleLogout}>Logout</button>
-          <TaskList />
+          <TaskList sessionId={sessionId} />
         </>
       ) : (
         <SignIn setUser={setUser} />

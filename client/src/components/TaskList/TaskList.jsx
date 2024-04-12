@@ -3,14 +3,19 @@ import "./style.css";
 import React, { useEffect, useState } from "react";
 import TaskItem from "../TaskItem/TaskItem";
 
-function TaskList() {
+function TaskList({ sessionId }) {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState({});
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/tasks");
+        const response = await axios.get("http://localhost:4000/api/tasks", {
+          withCredentials: true,
+          // headers: {
+          //   Cookie: `user_sid=${sessionId}`,
+          // },
+        });
         setTasks(response.data);
       } catch (error) {
         console.log(error);
@@ -32,7 +37,7 @@ function TaskList() {
 
     fetchTasks();
     fetchUsers();
-  }, []);
+  }, [sessionId]);
 
   return (
     <div className="task-list">

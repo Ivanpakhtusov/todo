@@ -87,7 +87,7 @@ router.get("/checkUser", async (req, res) => {
         where: { id: userSession },
         attributes: { exclude: ["password"] },
       });
-      res.status(201).json(user);
+      res.status(201).json({ user, sessionId: req.sessionID });
     } else {
       res.end();
     }
