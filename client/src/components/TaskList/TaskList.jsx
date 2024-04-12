@@ -12,9 +12,6 @@ function TaskList({ sessionId }) {
       try {
         const response = await axios.get("http://localhost:4000/api/tasks", {
           withCredentials: true,
-          // headers: {
-          //   Cookie: `user_sid=${sessionId}`,
-          // },
         });
         setTasks(response.data);
       } catch (error) {
@@ -27,6 +24,7 @@ function TaskList({ sessionId }) {
         const response = await axios.get("http://localhost:4000/api/users");
         const usersMap = response.data.reduce((acc, user) => {
           acc[user.id] = user;
+          acc[user.login] = user;
           return acc;
         }, {});
         setUsers(usersMap);
@@ -39,6 +37,17 @@ function TaskList({ sessionId }) {
     fetchUsers();
   }, [sessionId]);
 
+  const handleUpdateTask = (updatedTask) => {
+    setTasks(
+      tasks.map((task) => {
+        if (task.id === updatedTask.id) {
+          return updatedTask;
+        }
+        return task;
+      })
+    );
+  };
+
   return (
     <div className="task-list">
       {tasks.map((task) => (
@@ -46,6 +55,8 @@ function TaskList({ sessionId }) {
           key={task.id}
           task={task}
           responsibleUser={users[task.responsible_id]}
+          taskCreator={users[task.creator_id]}
+          onUpdate={handleUpdateTask}
         />
       ))}
     </div>
