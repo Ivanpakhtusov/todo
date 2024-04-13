@@ -4,7 +4,7 @@ import { Modal, Form, Input, Select, DatePicker } from "antd";
 const { TextArea } = Input;
 const { Option } = Select;
 
-const TaskForm = ({ open, onCreate, onCancel, creatorId }) => {
+const CreateTaskForm = ({ open, onCreate, onCancel, creatorId }) => {
   const [form] = Form.useForm();
 
   const handleOk = () => {
@@ -12,7 +12,7 @@ const TaskForm = ({ open, onCreate, onCancel, creatorId }) => {
       .validateFields()
       .then((values) => {
         form.resetFields();
-        onCreate({ ...values, creator_id: creatorId });
+        onCreate({ ...values, creator_id: creatorId, finishedAt: values.finishedAt ? values.finishedAt.startOf('day').toDate() : null });
       })
       .catch((info) => {
         console.log("Validate Failed:", info);
@@ -60,11 +60,12 @@ const TaskForm = ({ open, onCreate, onCancel, creatorId }) => {
           <Input />
         </Form.Item>
         <Form.Item name="finishedAt" label="Finished At">
-          <DatePicker showTime format="YYYY-MM-DD" />
+          <DatePicker format="YYYY-MM-DD" />
         </Form.Item>
       </Form>
     </Modal>
   );
 };
 
-export default TaskForm;
+export default CreateTaskForm;
+

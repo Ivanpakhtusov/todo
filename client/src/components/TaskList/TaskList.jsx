@@ -2,7 +2,7 @@ import axios from "axios";
 import "./style.css";
 import React, { useEffect, useState } from "react";
 import TaskItem from "../TaskItem/TaskItem";
-import CreateeTaskFrom from "../CreateTaskForm/CreateTaskForm";
+import CreateTaskForm from "../CreateTaskForm/CreateTaskForm";
 
 function TaskList({ sessionId, currentUser }) {
   const [tasks, setTasks] = useState([]);
@@ -90,7 +90,7 @@ function TaskList({ sessionId, currentUser }) {
     <>
       <button onClick={handleOpenModal}>Create Task</button>
       <div className="task-list">
-        <CreateeTaskFrom
+        <CreateTaskForm
           open={isModalOpen}
           onCreate={handleCreateTask}
           onCancel={handleCloseModal}
