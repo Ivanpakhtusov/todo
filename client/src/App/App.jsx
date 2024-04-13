@@ -3,6 +3,7 @@ import axios from "axios";
 import Auth from "../components/Auth/Auth";
 import TaskList from "../components/TaskList/TaskList";
 import Loading from "../components/Loading/Loading";
+import "./App.css";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -61,8 +62,14 @@ function App() {
     <>
       {currentUser ? (
         <>
-          <div>{currentUser.name}</div>
-          <button onClick={handleLogout}>Logout</button>
+          <header className="header">
+            <div className="user-actions">
+              <div className="user-name">{currentUser.name}</div>
+              <button className="logout-button" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
+          </header>
           <TaskList sessionId={sessionId} currentUser={currentUser} />
         </>
       ) : (

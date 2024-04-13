@@ -35,30 +35,31 @@ router
       res.json(message);
     }
   })
-  .put('/tasks/:id', async (req, res) => {
+  .put("/tasks/:id", async (req, res) => {
     const { id } = req.params;
-    const { title, description, priority, status, responsible_id, finishedAt } = req.body;
-  
+    const { title, description, priority, status, responsible_id, finishedAt } =
+      req.body;
+
     try {
       const task = await Task.findByPk(id);
-  
+
       if (!task) {
-        return res.status(404).json({ message: 'Task not found' });
+        return res.status(404).json({ message: "Task not found" });
       }
-  
+
       task.title = title || task.title;
       task.description = description || task.description;
       task.priority = priority || task.priority;
       task.status = status || task.status;
       task.responsible_id = responsible_id || task.responsible_id;
       task.finishedAt = finishedAt || task.finishedAt;
-  
+
       await task.save();
-  
+
       res.json(task);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Server error' });
+      res.status(500).json({ message: "Server error" });
     }
   })
   .delete("/tasks/:taskId", async (req, res) => {

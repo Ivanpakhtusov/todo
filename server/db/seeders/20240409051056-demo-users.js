@@ -43,7 +43,7 @@ module.exports = {
       dataUsers.map((user) => bcrypt.hash(user.password, 10))
     );
 
-    const users = dataUsers.map((user,index) => ({
+    const users = dataUsers.map((user, index) => ({
       isManager: user.isManager || false,
       ...user,
       password: hashedPasswords[index],

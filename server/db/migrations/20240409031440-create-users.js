@@ -32,7 +32,7 @@ module.exports = {
       },
       isManager: {
         type: Sequelize.BOOLEAN,
-        defaultValue:false
+        defaultValue: false,
       },
       manager_id: {
         type: Sequelize.TEXT,

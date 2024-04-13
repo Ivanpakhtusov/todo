@@ -88,7 +88,11 @@ function TaskList({ sessionId, currentUser }) {
 
   return (
     <>
-      <button onClick={handleOpenModal}>Create Task</button>
+      <div className="create-task-button-container">
+        <button className="create-task-button" onClick={handleOpenModal}>
+          Create Task
+        </button>
+      </div>
       <div className="task-list">
         <CreateTaskForm
           open={isModalOpen}

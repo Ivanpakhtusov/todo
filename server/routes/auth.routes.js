@@ -10,13 +10,15 @@ router.post("/signin", async (req, res) => {
       const user = await User.findOne({ where: { login } });
 
       if (!user) {
-        return res.status(404).json({ message: 'Пользователь с таким логином не найден' });
+        return res
+          .status(404)
+          .json({ message: "Пользователь с таким логином не найден" });
       }
 
       const isPasswordValid = await bcrypt.compare(password, user.password);
 
       if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Неверный пароль' });
+        return res.status(401).json({ message: "Неверный пароль" });
       }
 
       const newUser = {
@@ -36,7 +38,6 @@ router.post("/signin", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 router.post("/signup", async (req, res) => {
   const { name, surname, middlename, login, password } = req.body;
