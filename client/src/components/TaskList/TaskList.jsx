@@ -67,6 +67,16 @@ function TaskList({ sessionId, currentUser }) {
       console.log(error);
     }
   };
+  const handleDeleteTask = async (taskId) => {
+    try {
+      await axios.delete(`http://localhost:4000/api/tasks/${taskId}`, {
+        withCredentials: true,
+      });
+      setTasks(tasks.filter((task) => task.id !== taskId));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -87,13 +97,15 @@ function TaskList({ sessionId, currentUser }) {
           creatorId={currentUser?.login}
         />
         {tasks.map((task) => (
-          <TaskItem
-            key={task.id}
-            task={task}
-            responsibleUser={users[task.responsible_id]}
-            taskCreator={users[task.creator_id]}
-            onUpdate={handleUpdateTask}
-          />
+          <div key={task.id}>
+            <TaskItem
+              task={task}
+              responsibleUser={users[task.responsible_id]}
+              taskCreator={users[task.creator_id]}
+              onUpdate={handleUpdateTask}
+              handleDeleteTask={handleDeleteTask}
+            />
+          </div>
         ))}
       </div>
     </>

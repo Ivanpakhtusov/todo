@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import "./style.css";
 import TaskModal from "../TaskModal/TaskModal";
+import DeleteTask from "../DeleteTask/DeleteTask";
 
-function TaskItem({ task, responsibleUser, taskCreator, onUpdate }) {
+function TaskItem({
+  task,
+  responsibleUser,
+  taskCreator,
+  onUpdate,
+  handleDeleteTask,
+}) {
   const [modal, setModal] = useState(false);
 
   const handleModal = () => {
@@ -32,6 +39,8 @@ function TaskItem({ task, responsibleUser, taskCreator, onUpdate }) {
       )}
       {task.finishedAt && <p>Дата окончания: {task.finishedAt}</p>}
       <button onClick={handleModal}>Изменить задачу</button>
+      <DeleteTask task={task} onDelete={handleDeleteTask}  />
+
       <TaskModal
         open={modal}
         onCreate={handleOk}
