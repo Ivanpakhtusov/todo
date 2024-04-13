@@ -18,6 +18,7 @@ function App() {
           });
           setUser(response.data.user);
           setSessionId(response.data.sessionId);
+          
         } catch (error) {
           console.log(error);
         }
@@ -45,7 +46,7 @@ function App() {
         <>
           <div>{user.name}</div>
           <button onClick={handleLogout}>Logout</button>
-          <TaskList sessionId={sessionId} />
+          <TaskList sessionId={sessionId}/>
         </>
       ) : (
         <SignIn setUser={setUser} />

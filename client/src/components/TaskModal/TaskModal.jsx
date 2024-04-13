@@ -39,8 +39,9 @@ const TaskModal = ({ open, onCancel, task, onUpdate }) => {
         updatedTask
       );
       message.success("Task updated successfully");
+      console.log(response);
       onUpdate(response.data);
-      onCancel();
+      onCancel(); 
     } catch (error) {
       console.error(error);
       message.error("Error updating task");
@@ -72,7 +73,7 @@ const TaskModal = ({ open, onCancel, task, onUpdate }) => {
           label="Description"
           initialValue={task.description}
         >
-          <TextArea rows={4} />
+          <TextArea rows={2} />
         </Form.Item>
         <Form.Item name="priority" label="Priority" initialValue={priority}>
           <Select onChange={handlePriorityChange}>

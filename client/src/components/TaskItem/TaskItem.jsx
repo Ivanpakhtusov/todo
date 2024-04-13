@@ -30,12 +30,14 @@ function TaskItem({ task, responsibleUser, taskCreator, onUpdate }) {
           Менеджер задачи: {taskCreator.surname} {taskCreator.name}
         </p>
       )}
+      {task.finishedAt && <p>Дата окончания: {task.finishedAt}</p>}
       <button onClick={handleModal}>Изменить задачу</button>
       <TaskModal
         open={modal}
         onCreate={handleOk}
         onCancel={handleCancel}
         task={task}
+        onUpdate={onUpdate}
       />
     </div>
   );
