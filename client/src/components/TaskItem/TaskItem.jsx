@@ -37,9 +37,11 @@ function TaskItem({
           Менеджер задачи: {taskCreator.surname} {taskCreator.name}
         </p>
       )}
-      {task.finishedAt && <p>Дата окончания: {task.finishedAt}</p>}
+      {task.finishedAt && (
+        <p>Дата окончания: {new Date(task.finishedAt).toLocaleDateString()}</p>
+      )}
       <button onClick={handleModal}>Изменить задачу</button>
-      <DeleteTask task={task} onDelete={handleDeleteTask}  />
+      <DeleteTask task={task} onDelete={handleDeleteTask} />
 
       <TaskModal
         open={modal}

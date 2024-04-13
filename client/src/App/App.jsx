@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Auth from "../components/Auth/Auth";
 import TaskList from "../components/TaskList/TaskList";
+import Loading from "../components/Loading/Loading";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [sessionId, setSessionId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -21,11 +23,18 @@ function App() {
             }
           );
           setCurrentUser(response.data.user);
-
           setSessionId(response.data.sessionId);
         } catch (error) {
           console.log(error);
+        } finally {
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
         }
+      } else {
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
       }
     };
 
@@ -43,6 +52,10 @@ function App() {
       console.log(error);
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <>

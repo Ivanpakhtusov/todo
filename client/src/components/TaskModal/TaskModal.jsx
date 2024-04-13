@@ -10,7 +10,9 @@ const TaskModal = ({ open, onCancel, task, onUpdate }) => {
   const [form] = Form.useForm();
 
   const [priority, setPriority] = useState(task.priority);
-  const [finishedAt, setFinishedAt] = useState(task.finishedAt);
+  const [finishedAt, setFinishedAt] = useState(
+    task.finishedAt ? moment(task.finishedAt).startOf("day").toDate() : null
+  );
 
   const handleOk = () => {
     form
@@ -29,7 +31,7 @@ const TaskModal = ({ open, onCancel, task, onUpdate }) => {
   };
 
   const handleFinishedAtChange = (date) => {
-    setFinishedAt(date);
+    setFinishedAt(date ? date.startOf("day").toDate() : null);
   };
 
   const updateTask = async (updatedTask) => {
@@ -41,7 +43,7 @@ const TaskModal = ({ open, onCancel, task, onUpdate }) => {
       message.success("Task updated successfully");
       console.log(response);
       onUpdate(response.data);
-      onCancel(); 
+      onCancel();
     } catch (error) {
       console.error(error);
       message.error("Error updating task");
@@ -109,11 +111,7 @@ const TaskModal = ({ open, onCancel, task, onUpdate }) => {
           label="Finished At"
           initialValue={moment(finishedAt)}
         >
-          <DatePicker
-            showTime
-            format="DD-MM-YYYY"
-            onChange={handleFinishedAtChange}
-          />
+          <DatePicker format="DD-MM-YYYY" onChange={handleFinishedAtChange} />
         </Form.Item>
       </Form>
     </Modal>
