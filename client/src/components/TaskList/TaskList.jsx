@@ -110,6 +110,7 @@ function TaskList({ sessionId, currentUser }) {
               onUpdate={handleUpdateTask}
               handleDeleteTask={handleDeleteTask}
               currentUser={currentUser}
+              users={users}
             />
           </div>
         ))}

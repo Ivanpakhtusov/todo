@@ -9,7 +9,8 @@ function TaskItem({
   taskCreator,
   onUpdate,
   handleDeleteTask,
-  currentUser
+  currentUser,
+  users,
 }) {
   const [modal, setModal] = useState(false);
 
@@ -57,7 +58,7 @@ function TaskItem({
       <p>Приоритет: {priorityTranslations[task.priority]}</p>
       {responsibleUser && (
         <p>
-          Ответственный: {responsibleUser.name} {responsibleUser.name}
+          Ответственный: {responsibleUser.surname} {responsibleUser.name}
         </p>
       )}
       {taskCreator && (
@@ -69,7 +70,9 @@ function TaskItem({
         <p>Дата окончания: {new Date(task.finishedAt).toLocaleDateString()}</p>
       )}
       <button onClick={handleModal}>Изменить задачу</button>
-      {currentUser.isManager && <DeleteTask task={task} onDelete={handleDeleteTask} />}
+      {currentUser.isManager && (
+        <DeleteTask task={task} onDelete={handleDeleteTask} />
+      )}
 
       <TaskModal
         open={modal}
@@ -78,6 +81,7 @@ function TaskItem({
         task={task}
         onUpdate={onUpdate}
         currentUser={currentUser}
+        users={users}
       />
     </div>
   );

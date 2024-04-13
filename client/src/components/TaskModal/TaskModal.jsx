@@ -6,14 +6,20 @@ import axios from "axios";
 const { TextArea } = Input;
 const { Option } = Select;
 
-const TaskModal = ({ open, onCancel, task, onUpdate, currentUser }) => {
+const TaskModal = ({ open, onCancel, task, onUpdate, currentUser, users }) => {
   const [form] = Form.useForm();
 
   const [priority, setPriority] = useState(task.priority);
   const [finishedAt, setFinishedAt] = useState(
     task.finishedAt ? moment(task.finishedAt).startOf("day").toDate() : null
   );
-
+  const filteredUsers = Object.values(users).filter(
+    (user) => user.manager_id === currentUser.login
+  );
+  const uniqueFilteredUsers = Array.from(
+    new Set(filteredUsers.map((user) => user.id)),
+    (id) => filteredUsers.find((user) => user.id === id)
+  );
   const handleOk = () => {
     form
       .validateFields()
@@ -112,10 +118,16 @@ const TaskModal = ({ open, onCancel, task, onUpdate, currentUser }) => {
         {currentUser.isManager && (
           <Form.Item
             name="responsible_id"
-            label="Responsible ID"
+            label="Responsible"
             initialValue={task.responsible_id}
           >
-            <Input />
+            <Select>
+              {uniqueFilteredUsers.map((user) => (
+                <Option key={user.id} value={user.id}>
+                  {user.surname} {user.name}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
         )}
         {currentUser.isManager && (
