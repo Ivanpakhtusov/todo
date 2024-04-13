@@ -9,6 +9,7 @@ function TaskItem({
   taskCreator,
   onUpdate,
   handleDeleteTask,
+  currentUser
 }) {
   const [modal, setModal] = useState(false);
 
@@ -68,7 +69,7 @@ function TaskItem({
         <p>Дата окончания: {new Date(task.finishedAt).toLocaleDateString()}</p>
       )}
       <button onClick={handleModal}>Изменить задачу</button>
-      <DeleteTask task={task} onDelete={handleDeleteTask} />
+      {currentUser.isManager && <DeleteTask task={task} onDelete={handleDeleteTask} />}
 
       <TaskModal
         open={modal}
@@ -76,6 +77,7 @@ function TaskItem({
         onCancel={handleCancel}
         task={task}
         onUpdate={onUpdate}
+        currentUser={currentUser}
       />
     </div>
   );

@@ -37,8 +37,7 @@ function TaskList({ sessionId, currentUser }) {
   useEffect(() => {
     fetchUsers();
     fetchTasks();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionId]);
+  }, [sessionId, currentUser]);
 
   const handleUpdateTask = (updatedTask) => {
     setTasks(
@@ -89,9 +88,11 @@ function TaskList({ sessionId, currentUser }) {
   return (
     <>
       <div className="create-task-button-container">
-        <button className="create-task-button" onClick={handleOpenModal}>
-          Create Task
-        </button>
+        {currentUser.isManager && (
+          <button className="create-task-button" onClick={handleOpenModal}>
+            Create Task
+          </button>
+        )}
       </div>
       <div className="task-list">
         <CreateTaskForm
@@ -108,6 +109,7 @@ function TaskList({ sessionId, currentUser }) {
               taskCreator={users[task.creator_id]}
               onUpdate={handleUpdateTask}
               handleDeleteTask={handleDeleteTask}
+              currentUser={currentUser}
             />
           </div>
         ))}

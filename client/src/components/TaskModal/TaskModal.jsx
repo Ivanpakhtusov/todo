@@ -6,7 +6,7 @@ import axios from "axios";
 const { TextArea } = Input;
 const { Option } = Select;
 
-const TaskModal = ({ open, onCancel, task, onUpdate }) => {
+const TaskModal = ({ open, onCancel, task, onUpdate, currentUser }) => {
   const [form] = Form.useForm();
 
   const [priority, setPriority] = useState(task.priority);
@@ -60,59 +60,73 @@ const TaskModal = ({ open, onCancel, task, onUpdate }) => {
       onOk={handleOk}
     >
       <Form form={form} layout="vertical">
-        <Form.Item
-          name="title"
-          label="Title"
-          rules={[
-            { required: true, message: "Please input the title of task!" },
-          ]}
-          initialValue={task.title}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="description"
-          label="Description"
-          initialValue={task.description}
-        >
-          <TextArea rows={2} />
-        </Form.Item>
-        <Form.Item name="priority" label="Priority" initialValue={priority}>
-          <Select onChange={handlePriorityChange}>
-            <Option value="high">High</Option>
-            <Option value="medium">Medium</Option>
-            <Option value="low">Low</Option>
-          </Select>
-        </Form.Item>
+        {currentUser.isManager && (
+          <Form.Item
+            name="title"
+            label="Title"
+            rules={[
+              { required: true, message: "Please input the title of task!" },
+            ]}
+            initialValue={task.title}
+          >
+            <Input />
+          </Form.Item>
+        )}
+        {currentUser.isManager && (
+          <Form.Item
+            name="description"
+            label="Description"
+            initialValue={task.description}
+          >
+            <TextArea rows={2} />
+          </Form.Item>
+        )}
+        {currentUser.isManager && (
+          <Form.Item name="priority" label="Priority" initialValue={priority}>
+            <Select onChange={handlePriorityChange}>
+              <Option value="high">High</Option>
+              <Option value="medium">Medium</Option>
+              <Option value="low">Low</Option>
+            </Select>
+          </Form.Item>
+        )}
         <Form.Item name="status" label="Status" initialValue={task.status}>
           <Select>
             <Option value="toDo">To Do</Option>
             <Option value="inProgress">In Progress</Option>
             <Option value="done">Done</Option>
-            <Option value="cancelled">Cancelled</Option>
+            {currentUser.isManager && (
+              <Option value="cancelled">Cancelled</Option>
+            )}
           </Select>
         </Form.Item>
-        <Form.Item
-          name="creator_id"
-          label="Creator ID"
-          initialValue={task.creator_id}
-        >
-          <Input disabled />
-        </Form.Item>
-        <Form.Item
-          name="responsible_id"
-          label="Responsible ID"
-          initialValue={task.responsible_id}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="finishedAt"
-          label="Finished At"
-          initialValue={moment(finishedAt)}
-        >
-          <DatePicker format="DD-MM-YYYY" onChange={handleFinishedAtChange} />
-        </Form.Item>
+        {currentUser.isManager && (
+          <Form.Item
+            name="creator_id"
+            label="Creator ID"
+            initialValue={task.creator_id}
+          >
+            <Input disabled />
+          </Form.Item>
+        )}
+        {currentUser.isManager && (
+          <Form.Item
+            name="responsible_id"
+            label="Responsible ID"
+            initialValue={task.responsible_id}
+          >
+            <Input />
+          </Form.Item>
+        )}
+        {currentUser.isManager && (
+          <Form.Item
+            name="finishedAt"
+            label="Finished At"
+            initialValue={moment(finishedAt)}
+          >
+            <DatePicker format="DD-MM-YYYY" onChange={handleFinishedAtChange} />
+          </Form.Item>
+        )}
       </Form>
     </Modal>
   );
