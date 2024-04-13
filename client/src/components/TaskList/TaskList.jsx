@@ -4,11 +4,10 @@ import React, { useEffect, useState } from "react";
 import TaskItem from "../TaskItem/TaskItem";
 import CreateeTaskFrom from "../CreateTaskForm/CreateTaskForm";
 
-function TaskList({ sessionId }) {
+function TaskList({ sessionId, currentUser }) {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
 
   const fetchUsers = async () => {
     try {
@@ -19,7 +18,6 @@ function TaskList({ sessionId }) {
         return acc;
       }, {});
       setUsers(usersMap);
-      setCurrentUser(usersMap[sessionId]);
     } catch (error) {
       console.log(error);
     }

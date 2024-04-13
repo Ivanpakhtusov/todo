@@ -4,21 +4,25 @@ import SignIn from "../components/SignIn/SignIn";
 import TaskList from "../components/TaskList/TaskList";
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [sessionId, setSessionId] = useState(null);
 
   useEffect(() => {
     const checkUser = async () => {
-      const cookie = document.cookie.split("; ").find((row) => row.startsWith("user_sid="));
-
+      const cookie = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("user_sid="));
       if (cookie) {
         try {
-          const response = await axios.get("http://localhost:4000/auth/checkUser", {
-            withCredentials: true,
-          });
-          setUser(response.data.user);
+          const response = await axios.get(
+            "http://localhost:4000/auth/checkUser",
+            {
+              withCredentials: true,
+            }
+          );
+          setCurrentUser(response.data.user);
+
           setSessionId(response.data.sessionId);
-          
         } catch (error) {
           console.log(error);
         }
@@ -33,7 +37,7 @@ function App() {
       await axios.get("http://localhost:4000/auth/logout", {
         withCredentials: true,
       });
-      setUser(null);
+      setCurrentUser(null);
       setSessionId(null);
     } catch (error) {
       console.log(error);
@@ -42,14 +46,14 @@ function App() {
 
   return (
     <>
-      {user ? (
+      {currentUser ? (
         <>
-          <div>{user.name}</div>
+          <div>{currentUser.name}</div>
           <button onClick={handleLogout}>Logout</button>
-          <TaskList sessionId={sessionId}/>
+          <TaskList sessionId={sessionId} currentUser={currentUser} />
         </>
       ) : (
-        <SignIn setUser={setUser} />
+        <SignIn setUser={setCurrentUser} />
       )}
     </>
   );

@@ -12,7 +12,7 @@ const TaskForm = ({ open, onCreate, onCancel, creatorId }) => {
       .validateFields()
       .then((values) => {
         form.resetFields();
-        onCreate({ ...values, creator_id: "manager@manager.com" });
+        onCreate({ ...values, creator_id: creatorId });
       })
       .catch((info) => {
         console.log("Validate Failed:", info);
