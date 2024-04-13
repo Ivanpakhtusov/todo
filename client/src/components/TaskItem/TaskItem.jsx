@@ -25,13 +25,40 @@ function TaskItem({
     setModal(false);
   };
 
+  const getTitleColor = (task) => {
+    if (task.status === "done") {
+      return "task-title-green";
+    }
+
+    if (task.finishedAt && new Date(task.finishedAt) < new Date()) {
+      return "task-title-red";
+    }
+
+    return "task-title-gray";
+  };
+  const statusTranslations = {
+    toDo: "К выполнению",
+    inProgress: "В процессе",
+    done: "Выполнено",
+    cancelled: "Отменено",
+  };
+
+  const priorityTranslations = {
+    high: "Высокий",
+    medium: "Средний",
+    low: "Низкий",
+  };
   return (
     <div className="task-item">
-      <p>{task.title}</p>
+      <h3 className={getTitleColor(task)}>{task.title}</h3>
       <p>{task.description}</p>
-      <p>Статус: {task.status}</p>
-      <p>Приоритет: {task.priority}</p>
-      {responsibleUser && <p>Ответственный: {responsibleUser.name}</p>}
+      <p>Статус: {statusTranslations[task.status]}</p>
+      <p>Приоритет: {priorityTranslations[task.priority]}</p>
+      {responsibleUser && (
+        <p>
+          Ответственный: {responsibleUser.name} {responsibleUser.name}
+        </p>
+      )}
       {taskCreator && (
         <p>
           Менеджер задачи: {taskCreator.surname} {taskCreator.name}

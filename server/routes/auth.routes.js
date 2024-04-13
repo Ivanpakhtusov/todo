@@ -8,28 +8,35 @@ router.post("/signin", async (req, res) => {
   try {
     if (login && password) {
       const user = await User.findOne({ where: { login } });
-      if (user && (await bcrypt.compare(password, user.password))) {
-        const newUser = {
-          id: user.id,
-          name: user.name,
-          surname: user.surname,
-          middlename: user.middlename,
-          login: user.login,
-        };
-        req.session.userId = newUser.id;
-        res.status(201).json(newUser);
-      } else {
-        res
-          .status(403)
-          .json({ message: "Ваш логин или пароль не соответствуют" });
+
+      if (!user) {
+        return res.status(404).json({ message: 'Пользователь с таким логином не найден' });
       }
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordValid) {
+        return res.status(401).json({ message: 'Неверный пароль' });
+      }
+
+      const newUser = {
+        id: user.id,
+        name: user.name,
+        surname: user.surname,
+        middlename: user.middlename,
+        login: user.login,
+      };
+
+      req.session.userId = newUser.id;
+      res.status(201).json(newUser);
     } else {
       res.status(403).json({ message: "Заполните все поля" });
     }
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
+
 
 router.post("/signup", async (req, res) => {
   const { name, surname, middlename, login, password } = req.body;
