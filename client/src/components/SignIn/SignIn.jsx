@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function SignIn({ setUser }) {
+function SignIn({ setUser, handleToggle }) {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
@@ -32,26 +32,25 @@ function SignIn({ setUser }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Логин:
-        <input
-          type="email"
-          value={login}
-          onChange={(e) => setLogin(e.target.value)}
-        />
-      </label>
+    <form className="auth-form" onSubmit={handleSubmit}>
+      <label>Логин</label>
+      <input
+        type="email"
+        value={login}
+        onChange={(e) => setLogin(e.target.value)}
+      />
       <br />
-      <label>
-        Пароль:
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </label>
+      <label>Пароль</label>
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
       <br />
-      <button type="submit">Войти</button>
+      <button type="submit">Login</button>
+      <button onClick={handleToggle} className="auth-toggle">
+        Зарегистрироваться
+      </button>
     </form>
   );
 }

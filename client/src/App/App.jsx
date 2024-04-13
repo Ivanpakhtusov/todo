@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import SignIn from "../components/SignIn/SignIn";
+import Auth from "../components/Auth/Auth";
 import TaskList from "../components/TaskList/TaskList";
 
 function App() {
@@ -53,7 +53,7 @@ function App() {
           <TaskList sessionId={sessionId} currentUser={currentUser} />
         </>
       ) : (
-        <SignIn setUser={setCurrentUser} />
+        <Auth setUser={setCurrentUser} />
       )}
     </>
   );

@@ -1,39 +1,44 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
-function SignUp() {
+function SignUp({ setUser, handleToggle }) {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [middlename, setMiddlename] = useState("");
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   const onHandleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("/auth/signup", {
-        name,
-        surname,
-        middlename,
-        login,
-        password,
+      const response = await fetch("http://localhost:4000/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, surname, middlename, login, password }),
+        credentials: "include",
       });
-      console.log(response.data);
-      setName("");
-      setSurname("");
-      setMiddlename("");
-      setLogin("");
-      setPassword("");
-      navigate("/");
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setUser(data);
+        setName("");
+        setSurname("");
+        setMiddlename("");
+        setLogin("");
+        setPassword("");
+      } else {
+        const error = await response.json();
+        alert(error.message);
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <form className="signup-form" onSubmit={onHandleSubmit}>
+    <form className="auth-form" onSubmit={onHandleSubmit}>
       <label htmlFor="name">Name</label>
       <input
         value={name}
@@ -70,6 +75,9 @@ function SignUp() {
         type="password"
       />
       <button type="submit">Sign Up</button>
+      <button onClick={handleToggle} className="auth-toggle">
+        Войти
+      </button>
     </form>
   );
 }
