@@ -1,6 +1,6 @@
 import axios from "axios";
 import "./style.css";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TaskItem from "../TaskItem/TaskItem";
 import CreateTaskForm from "../CreateTaskForm/CreateTaskForm";
 
@@ -9,6 +9,14 @@ function TaskList({ sessionId, currentUser }) {
   const [users, setUsers] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("all");
+  const [responsibleUser, setResponsibleUser] = useState("");
+
+  const getResponsibleUsers = () => {
+    return [...new Set(tasks.map((task) => task.responsible_id))];
+  };
+  const handleResponsibleUserChange = (e) => {
+    setResponsibleUser(e.target.value);
+  };
 
   const handleFilterChange = (filter) => {
     setActiveFilter(filter);
@@ -17,29 +25,41 @@ function TaskList({ sessionId, currentUser }) {
   const filterTasks = () => {
     const today = new Date();
     const oneWeekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    let filteredTasks = tasks;
 
     switch (activeFilter) {
       case "today":
-        return tasks.filter(
+        filteredTasks = filteredTasks.filter(
           (task) =>
             new Date(task.finishedAt).toDateString() === today.toDateString()
         );
+        break;
       case "week":
-        return tasks.filter(
+        filteredTasks = filteredTasks.filter(
           (task) =>
             new Date(task.finishedAt) > today &&
             new Date(task.finishedAt) <= oneWeekFromNow
         );
+        break;
       case "future":
-        return tasks.filter(
+        filteredTasks = filteredTasks.filter(
           (task) => new Date(task.finishedAt) > oneWeekFromNow
         );
+        break;
       default:
-        return tasks;
+        break;
     }
+
+    if (responsibleUser) {
+      filteredTasks = filteredTasks.filter(
+        (task) => task.responsible_id.toString() === responsibleUser
+      );
+    }
+
+    return filteredTasks;
   };
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       const response = await axios.get("http://localhost:4000/api/users");
       const usersMap = response.data.reduce((acc, user) => {
@@ -51,7 +71,12 @@ function TaskList({ sessionId, currentUser }) {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchUsers();
+    fetchTasks();
+  }, [sessionId, currentUser, fetchUsers]);
 
   const fetchTasks = async () => {
     try {
@@ -67,7 +92,7 @@ function TaskList({ sessionId, currentUser }) {
   useEffect(() => {
     fetchUsers();
     fetchTasks();
-  }, [sessionId, currentUser]);
+  }, [sessionId, currentUser, fetchUsers]);
 
   const handleUpdateTask = (updatedTask) => {
     setTasks(
@@ -154,6 +179,22 @@ function TaskList({ sessionId, currentUser }) {
           Future
         </button>
       </div>
+      <label htmlFor="responsible-user">Ответственный: </label>
+      <select
+        id="responsible-user"
+        value={responsibleUser}
+        onChange={handleResponsibleUserChange}
+      >
+        <option value="">-</option>
+        {getResponsibleUsers().map((userId) => {
+          const user = users[userId];
+          return (
+            <option key={userId} value={userId}>
+              {user.surname} {user.name}
+            </option>
+          );
+        })}
+      </select>
       <div className="task-list">
         <CreateTaskForm
           open={isModalOpen}
