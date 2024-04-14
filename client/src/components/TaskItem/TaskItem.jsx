@@ -69,7 +69,9 @@ function TaskItem({
       {task.finishedAt && (
         <p>Дата окончания: {new Date(task.finishedAt).toLocaleDateString()}</p>
       )}
-      <button onClick={handleModal}>Изменить задачу</button>
+      {currentUser.id === task.responsible_id && (
+        <button onClick={handleModal}>Изменить задачу</button>
+      )}
       {currentUser.isManager && (
         <DeleteTask task={task} onDelete={handleDeleteTask} />
       )}
