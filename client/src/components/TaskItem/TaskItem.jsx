@@ -69,7 +69,7 @@ function TaskItem({
       {task.finishedAt && (
         <p>Дата окончания: {new Date(task.finishedAt).toLocaleDateString()}</p>
       )}
-      {currentUser.id === task.responsible_id && (
+      {(currentUser.id === task.responsible_id || currentUser.isManager) && (
         <button onClick={handleModal}>Изменить задачу</button>
       )}
       {currentUser.isManager && (

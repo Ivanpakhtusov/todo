@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
+import "./style.css";
 
 function DeleteTask({ task, onDelete }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -23,10 +24,18 @@ function DeleteTask({ task, onDelete }) {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         ariaHideApp={false}
+        className="modal-content"
       >
         <p>Вы уверены, что хотите удалить задачу "{task.title}"?</p>
-        <button onClick={handleDelete}>Да</button>
-        <button onClick={closeModal}>Нет</button>
+        <button onClick={handleDelete} className="modal-button">
+          Да
+        </button>
+        <button
+          onClick={closeModal}
+          className="modal-button modal-button--cancel"
+        >
+          Нет
+        </button>
       </Modal>
     </div>
   );
