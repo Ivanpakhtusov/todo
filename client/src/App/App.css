@@ -38,12 +38,12 @@
 }
 
 .create-task-button {
-  background-color: #4caf50;
+  background-color: #58b0ad;
   color: white;
 }
 
 .create-task-button:hover {
-  background-color: #43a047;
+  background-color: #327a7c;
 }
 .create-task-button-container {
   display: flex;

@@ -3,3 +3,31 @@
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 20px;
 }
+.filter-buttons-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.filter-button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.filter-button:hover {
+  background-color: #3e8e41;
+}
+
+.filter-button.active {
+  background-color: #2e7d32;
+}
