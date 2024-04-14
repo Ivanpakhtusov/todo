@@ -160,6 +160,8 @@ function TaskList({ sessionId, currentUser }) {
           onCreate={handleCreateTask}
           onCancel={handleCloseModal}
           creatorId={currentUser?.login}
+          users={users}
+          currentUser={currentUser}
         />
         {filterTasks().map((task) => (
           <div key={task.id}>

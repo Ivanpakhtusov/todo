@@ -4,8 +4,24 @@ import { Modal, Form, Input, Select, DatePicker } from "antd";
 const { TextArea } = Input;
 const { Option } = Select;
 
-const CreateTaskForm = ({ open, onCreate, onCancel, creatorId }) => {
+const CreateTaskForm = ({
+  open,
+  onCreate,
+  onCancel,
+  creatorId,
+  currentUser,
+  users,
+}) => {
   const [form] = Form.useForm();
+
+  const filteredUsers = Object.values(users).filter(
+    (user) => user.manager_id === currentUser.login
+  );
+
+  const uniqueFilteredUsers = Array.from(
+    new Set(filteredUsers.map((user) => user.id)),
+    (id) => filteredUsers.find((user) => user.id === id)
+  );
 
   const handleOk = () => {
     form
@@ -62,8 +78,14 @@ const CreateTaskForm = ({ open, onCreate, onCancel, creatorId }) => {
             <Option value="cancelled">Cancelled</Option>
           </Select>
         </Form.Item>
-        <Form.Item name="responsible_id" label="Responsible ID">
-          <Input />
+        <Form.Item name="responsible_id" label="Responsible">
+          <Select>
+            {uniqueFilteredUsers.map((user) => (
+              <Option key={user.id} value={user.id}>
+                {user.surname} {user.name}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item name="finishedAt" label="Finished At">
           <DatePicker format="YYYY-MM-DD" />
