@@ -179,22 +179,27 @@ function TaskList({ sessionId, currentUser }) {
           Future
         </button>
       </div>
-      <label htmlFor="responsible-user">Ответственный: </label>
-      <select
-        id="responsible-user"
-        value={responsibleUser}
-        onChange={handleResponsibleUserChange}
-      >
-        <option value="">-</option>
-        {getResponsibleUsers().map((userId) => {
-          const user = users[userId];
-          return (
-            <option key={userId} value={userId}>
-              {user.surname} {user.name}
-            </option>
-          );
-        })}
-      </select>
+      <div className="select-container">
+        <label htmlFor="responsible-user" className="select-label">
+          Ответственный:
+        </label>
+        <select
+          id="responsible-user"
+          value={responsibleUser}
+          onChange={handleResponsibleUserChange}
+          className="select"
+        >
+          <option value="">-</option>
+          {getResponsibleUsers().map((userId) => {
+            const user = users[userId];
+            return (
+              <option key={userId} value={userId}>
+                {user.surname} {user.name}
+              </option>
+            );
+          })}
+        </select>
+      </div>
       <div className="task-list">
         <CreateTaskForm
           open={isModalOpen}
